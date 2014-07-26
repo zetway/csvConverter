@@ -1,0 +1,2 @@
+c:\users\администратор\documents\visual studio 2012\Projects\csvConverter\csvConverter\bin\Debug\csvConverter.exe.config
+C:\Docs\csvConverter\csvConverter\bin\Debug\csvConverter.exe.config
