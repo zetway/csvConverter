@@ -1,2 +1,8 @@
-c:\users\администратор\documents\visual studio 2012\Projects\csvConverter\csvConverter\bin\Debug\csvConverter.exe.config
-C:\Docs\csvConverter\csvConverter\bin\Debug\csvConverter.exe.config
+D:\Docs\ConvertCSV\csvConverter\bin\Debug\convertTestCases.exe.config
+D:\Docs\ConvertCSV\csvConverter\bin\Debug\convertTestCases.exe
+D:\Docs\ConvertCSV\csvConverter\bin\Debug\convertTestCases.pdb
+D:\Docs\ConvertCSV\csvConverter\bin\Debug\Newtonsoft.Json.dll
+D:\Docs\ConvertCSV\csvConverter\bin\Debug\Newtonsoft.Json.xml
+D:\Docs\ConvertCSV\csvConverter\obj\Debug\csvConverter.csprojResolveAssemblyReference.cache
+D:\Docs\ConvertCSV\csvConverter\obj\Debug\convertTestCases.exe
+D:\Docs\ConvertCSV\csvConverter\obj\Debug\convertTestCases.pdb

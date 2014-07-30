@@ -1,0 +1,8 @@
+c:\users\andrii.kapinos\documents\visual studio 2012\Projects\convertTestCases\convertTestCases\bin\Debug\convertTestCases.exe.config
+c:\users\andrii.kapinos\documents\visual studio 2012\Projects\convertTestCases\convertTestCases\bin\Debug\convertTestCases.exe
+c:\users\andrii.kapinos\documents\visual studio 2012\Projects\convertTestCases\convertTestCases\bin\Debug\convertTestCases.pdb
+c:\users\andrii.kapinos\documents\visual studio 2012\Projects\convertTestCases\convertTestCases\obj\Debug\convertTestCases.csprojResolveAssemblyReference.cache
+c:\users\andrii.kapinos\documents\visual studio 2012\Projects\convertTestCases\convertTestCases\obj\Debug\convertTestCases.exe
+c:\users\andrii.kapinos\documents\visual studio 2012\Projects\convertTestCases\convertTestCases\obj\Debug\convertTestCases.pdb
+C:\Users\andrii.kapinos\documents\visual studio 2012\Projects\convertTestCases\convertTestCases\bin\Debug\Newtonsoft.Json.dll
+C:\Users\andrii.kapinos\documents\visual studio 2012\Projects\convertTestCases\convertTestCases\bin\Debug\Newtonsoft.Json.xml

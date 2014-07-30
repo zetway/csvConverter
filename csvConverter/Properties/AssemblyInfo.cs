@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("csvConverter")]
+[assembly: AssemblyTitle("convertTestCases")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("XTreme.ws")]
-[assembly: AssemblyProduct("csvConverter")]
-[assembly: AssemblyCopyright("Copyright © XTreme.ws 2014")]
+[assembly: AssemblyCompany("______")]
+[assembly: AssemblyProduct("convertTestCases")]
+[assembly: AssemblyCopyright("Copyright © ______ 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1a486565-9119-462f-93d9-9dc2bbb37e5e")]
+[assembly: Guid("e4490dfe-aa89-4014-9c1e-1de90108597d")]
 
 // Version information for an assembly consists of the following four values:
 //

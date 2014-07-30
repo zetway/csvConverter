@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,9 +14,9 @@ namespace csvConverter
     {
         public string Action;
         public int Position;
-        public string Value;
-    }
-
+        public string Value;    
+    }    
+    
     class ConverterConfig
     {
         public ConverterFiles Files;
@@ -46,24 +44,23 @@ namespace csvConverter
             ErrorParsing
         }
 
-        private Dictionary<string, string> varStack = new Dictionary<string, string>();
+        private Dictionary<string, string> varStack = new Dictionary<string, string>();        
         private ConverterConfig config;
-        private List<string> prevMainLine;
-        private string currentFile;
-        private List<string> currentRow;
+        private List<string> prevMainLine = new List<string>();
+        
+        private List<string> currentRow = new List<string>();        
         private bool canConvert = false;
         public Converter()
-        {
-
+        {     
+            
         }
 
-        public bool TryInstantiateConfig(string jsonConfig)
-        {
-            config = JsonConvert.DeserializeObject<ConverterConfig>(jsonConfig);
-            if (config == null) return false;
+        public void TryInstantiateConfig(string jsonConfig)
+        {            
+            config = JsonConvert.DeserializeObject<ConverterConfig>(jsonConfig);                       
             config.CSVHeader = config.CSVHeader.TrimEnd(new char[] { '\r', '\n', ' ' });
-            canConvert = true;
-            return true;
+            
+            canConvert = true;            
         }
 
         public ConvertionResult ConvertFiles()
@@ -75,19 +72,21 @@ namespace csvConverter
             int inputIndex;
             foreach (string file in config.Files.Filenames)
             {
-                currentFile = file;
+                
                 inputIndex = 0;
                 textBuilder = new StringBuilder();
                 inputText = "";
                 string inputFile = config.Files.Directory +
                     file +
                     config.Files.FileExtension;
+                string currentFileVarName = config.Files.VariableName.Substring(1);
+                varStack[currentFileVarName] = file;
 
                 try
                 {
                     using (StreamReader sr = new StreamReader(inputFile))
                     {
-                        inputText = sr.ReadToEnd();
+                        inputText = sr.ReadToEnd();                        
                         ReadRow(inputText, ref inputIndex, out row);
                         while (ReadRow(inputText, ref inputIndex, out row))
                         {
@@ -95,9 +94,9 @@ namespace csvConverter
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    return ConvertionResult.ErrorReadingFile;
+                    throw;
                 }
                 string outputFile = config.Files.Directory +
                     file +
@@ -115,8 +114,8 @@ namespace csvConverter
                 catch (Exception)
                 {
 
-                    return ConvertionResult.ErrorWritingFile;
-                }
+                    throw;
+                }                
             }
             return ConvertionResult.Success;
         }
@@ -124,6 +123,7 @@ namespace csvConverter
         private string ConvertRow(string line)
         {
             SplitToCells(line);
+            setPrevLineOrPopulateLine();
             RunRearangeSquense();
             StringBuilder convertedLine = new StringBuilder();
             foreach (string cell in currentRow)
@@ -133,14 +133,14 @@ namespace csvConverter
 
             return convertedLine.ToString().TrimEnd(new char[] { ',' });
         }
-
+        
         private string CompileValue(string value)
         {
             StringBuilder compiledValue = new StringBuilder(value);
             Regex varReg = new Regex(@"\{\$([a-z,A-Z][a-z,A-Z,0-1]*)\}");
-            Regex cellNumReg = new Regex(@"\{\#(\d+\)}");
+            Regex cellNumReg = new Regex(@"\{\#(\d+)\}");
             Match var = varReg.Match(value);
-            Match cell = varReg.Match(value);
+            Match cell = cellNumReg.Match(value);
             while (var.Success)
             {
                 string varName = var.Groups[0].Value;
@@ -169,7 +169,7 @@ namespace csvConverter
 
         private bool isVariableSet(string varName)
         {
-            if (!string.IsNullOrEmpty(varStack[varName])) return true;
+            if (varStack.ContainsKey(varName)) return true;
             return false;
         }
 
@@ -196,46 +196,51 @@ namespace csvConverter
             row = "";
             return false;
         }
-
+                
         private void RunRearangeSquense()
         {
             for (int i = 0; i < config.RearangeSequense.Length; i++)
             {
-                RuncAction(config.RearangeSequense[i]);
+                RunAction(config.RearangeSequense[i]);
             }
         }
 
-        private void RuncAction(ActionItem action)
+        private void RunAction(ActionItem action)
         {
-            int position = action.Position;
+            int position = action.Position;            
             string value = action.Value;
-            currentRow[position] = currentRow[position].Trim(new char[] { '"' });
+            if (position >= 0) currentRow[position] = currentRow[position].Trim(new char[] { '"' });
             switch (action.Action)
             {
                 case "MarkRemove":
                     RunMarkRemove(position, value);
-                    break;
+                    return;
                 case "FetchRemove":
                     RunFetchRemove(position, value);
-                    break;
+                    return;
                 case "Insert":
                     RunInsert(position, value);
                     break;
                 case "Pop":
                     RunPopCell(position, value);
-                    break;
+                    return;
                 case "Modify":
                     RunModify(position, value);
                     break;
                 default:
-                    break;
+                    return;
             }
             currentRow[position] = "\"" + currentRow[position] + "\"";
         }
 
-        private void RunMarkRemove(int postion, string value)
+        private void RunMarkRemove(int position, string value)
         {
-            currentRow[postion] = "!remove!";
+            int count = Convert.ToInt32(value);
+            for (int i = position; i < position + count; i++)
+            {
+                currentRow[i] = "!remove!";    
+            }
+            
         }
         private void RunFetchRemove(int position, string value)
         {
@@ -257,7 +262,7 @@ namespace csvConverter
         }
 
         private void SplitToCells(string line)
-        {
+        {            
             int start = 0;
             int count = 0;
             bool isInsideTheQuotes = false;
@@ -275,7 +280,7 @@ namespace csvConverter
                 }
                 count++;
             }
-
+            
         }
 
         private void CopyValuesFromPrevMainLine()
@@ -290,6 +295,7 @@ namespace csvConverter
         private void setPrevLineOrPopulateLine()
         {
             int lookupIndex = config.PopulateRowIfCellNumberIsEmpty;
+            if (lookupIndex < 0) return;
             if (prevMainLine == null)
             {
                 prevMainLine = new List<string>();
@@ -306,8 +312,7 @@ namespace csvConverter
                 prevMainLine.Clear();
                 prevMainLine.AddRange(currentRow);
             }
-        }
+        }     
 
     }
 }
-
